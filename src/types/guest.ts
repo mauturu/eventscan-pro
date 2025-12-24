@@ -1,14 +1,17 @@
 export interface Guest {
   id: string;
   name: string;
-  email?: string;
-  ticketType?: string;
+  phone: string;
+  gift: boolean;
   checkedInAt: Date;
 }
 
-export interface QRData {
-  id: string;
+export interface QRGuestData {
   name: string;
-  email?: string;
-  ticketType?: string;
+  phone: string;
+}
+
+export interface CSVGuest {
+  name: string;
+  phone: string;
 }
