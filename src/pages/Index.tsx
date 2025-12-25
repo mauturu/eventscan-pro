@@ -72,37 +72,38 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Decorative background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/3 rounded-full blur-[120px] animate-float" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-primary/3 rounded-full blur-[100px] animate-float" style={{ animationDelay: '-3s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/2 rounded-full blur-[150px]" />
       </div>
 
       {/* Header */}
-      <header className="relative border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-40">
-        <div className="container py-5">
+      <header className="relative border-b border-border/50 glass sticky top-0 z-40">
+        <div className="container py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center glow-gold">
-                <Sparkles className="w-6 h-6 text-primary" />
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-gold flex items-center justify-center glow-gold-intense">
+                <Sparkles className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="font-serif text-2xl text-foreground">Event Check-In</h1>
-                <p className="text-sm text-muted-foreground">Welcome your guests with elegance</p>
+                <h1 className="font-display text-3xl text-foreground tracking-tight">Event Check-In</h1>
+                <p className="text-sm text-muted-foreground mt-0.5">Welcome your guests with elegance</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Link to="/generate">
-                <Button variant="outline" className="gap-2 border-border hover:bg-secondary">
+                <Button variant="outline" className="gap-2 border-border/60 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300">
                   <QrCode className="w-4 h-4" />
                   <span className="hidden sm:inline">Generate QR Codes</span>
                 </Button>
               </Link>
               <Button 
                 onClick={() => setIsScannerOpen(true)}
-                className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+                className="gap-2 bg-gradient-gold text-primary-foreground hover:opacity-90 glow-gold transition-all duration-300"
               >
                 <Scan className="w-4 h-4" />
                 Start Scanning
@@ -113,7 +114,7 @@ const Index = () => {
       </header>
 
       {/* Main Content */}
-      <main className="relative container py-8">
+      <main className="relative container py-10">
         <GuestTable guests={guests} />
       </main>
 

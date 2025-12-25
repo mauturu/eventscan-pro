@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Gift, Phone, Clock, User } from 'lucide-react';
+import { Users, Gift, Phone, Clock, User, Sparkles } from 'lucide-react';
 import { Guest } from '@/types/guest';
 
 interface GuestTableProps {
@@ -17,28 +17,33 @@ const GuestTable = ({ guests }: GuestTableProps) => {
   const giftCount = guests.filter(g => g.gift).length;
 
   return (
-    <div className="bg-card border border-border rounded-xl overflow-hidden">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="glass rounded-2xl overflow-hidden"
+    >
       {/* Header */}
-      <div className="p-6 border-b border-border">
+      <div className="p-8 border-b border-border/50">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <Users className="w-5 h-5 text-primary" />
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-gold flex items-center justify-center glow-gold">
+              <Users className="w-7 h-7 text-primary-foreground" />
             </div>
             <div>
-              <h2 className="font-serif text-2xl text-foreground">Guest Registry</h2>
-              <p className="text-sm text-muted-foreground">Guests who have checked in</p>
+              <h2 className="font-display text-3xl text-foreground tracking-tight">Guest Registry</h2>
+              <p className="text-sm text-muted-foreground mt-1">Guests who have checked in</p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-center">
-              <p className="text-2xl font-serif text-primary">{guests.length}</p>
-              <p className="text-xs text-muted-foreground">Present</p>
+          <div className="flex items-center gap-6">
+            <div className="text-center px-4">
+              <p className="text-4xl font-display text-gradient-gold">{guests.length}</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Present</p>
             </div>
-            <div className="w-px h-10 bg-border" />
-            <div className="text-center">
-              <p className="text-2xl font-serif text-primary">{giftCount}</p>
-              <p className="text-xs text-muted-foreground">Gifts</p>
+            <div className="w-px h-12 bg-border/50" />
+            <div className="text-center px-4">
+              <p className="text-4xl font-display text-gradient-gold">{giftCount}</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Gifts</p>
             </div>
           </div>
         </div>
@@ -46,13 +51,18 @@ const GuestTable = ({ guests }: GuestTableProps) => {
 
       {/* Table */}
       {guests.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 px-4">
-          <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center mb-4">
-            <User className="w-10 h-10 text-muted-foreground" />
-          </div>
-          <p className="text-lg font-serif text-foreground mb-1">No guests yet</p>
-          <p className="text-sm text-muted-foreground text-center">
-            Click "Start Scanning" to begin checking in guests
+        <div className="flex flex-col items-center justify-center py-24 px-4">
+          <motion.div 
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', damping: 12, delay: 0.2 }}
+            className="w-24 h-24 rounded-3xl bg-gradient-gold-subtle flex items-center justify-center mb-6 glow-gold"
+          >
+            <Sparkles className="w-12 h-12 text-primary animate-glow" />
+          </motion.div>
+          <p className="text-2xl font-display text-foreground mb-2">Awaiting Guests</p>
+          <p className="text-sm text-muted-foreground text-center max-w-sm">
+            Click "Start Scanning" to begin checking in your distinguished guests
           </p>
         </div>
       ) : (
@@ -61,10 +71,10 @@ const GuestTable = ({ guests }: GuestTableProps) => {
             <thead>
               <tr>
                 <th className="w-12">#</th>
-                <th>Name</th>
-                <th>Phone</th>
+                <th>Guest Name</th>
+                <th>Contact</th>
                 <th className="text-center">Gift</th>
-                <th>Time</th>
+                <th>Arrival</th>
               </tr>
             </thead>
             <tbody>
@@ -72,19 +82,19 @@ const GuestTable = ({ guests }: GuestTableProps) => {
                 {guests.map((guest, index) => (
                   <motion.tr
                     key={guest.id}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3, delay: index === 0 ? 0 : 0.02 }}
-                    className={index === 0 && guests.length > 1 ? 'bg-primary/5' : ''}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.4, delay: index === 0 ? 0 : 0.03 }}
+                    className={index === 0 && guests.length > 1 ? 'bg-gradient-gold-subtle' : ''}
                   >
                     <td className="text-muted-foreground font-mono text-xs">
-                      {guests.length - index}
+                      {String(guests.length - index).padStart(2, '0')}
                     </td>
                     <td>
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                          <span className="text-xs font-medium text-primary">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-gold flex items-center justify-center">
+                          <span className="text-sm font-medium text-primary-foreground">
                             {guest.name.charAt(0).toUpperCase()}
                           </span>
                         </div>
@@ -93,26 +103,26 @@ const GuestTable = ({ guests }: GuestTableProps) => {
                     </td>
                     <td>
                       <div className="flex items-center gap-2 text-muted-foreground">
-                        <Phone className="w-3.5 h-3.5" />
-                        <span>{guest.phone}</span>
+                        <Phone className="w-4 h-4 text-primary/60" />
+                        <span className="font-mono text-sm">{guest.phone}</span>
                       </div>
                     </td>
                     <td className="text-center">
                       {guest.gift ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                          <Gift className="w-3 h-3" />
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-gold text-primary-foreground text-xs font-medium">
+                          <Gift className="w-3.5 h-3.5" />
                           Yes
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-secondary text-muted-foreground text-xs">
+                        <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-muted/50 text-muted-foreground text-xs">
                           No
                         </span>
                       )}
                     </td>
                     <td>
-                      <div className="flex items-center gap-1.5 text-muted-foreground text-xs">
-                        <Clock className="w-3.5 h-3.5" />
-                        <span>{formatTime(guest.checkedInAt)}</span>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Clock className="w-4 h-4 text-primary/60" />
+                        <span className="font-mono text-sm">{formatTime(guest.checkedInAt)}</span>
                       </div>
                     </td>
                   </motion.tr>
@@ -122,7 +132,7 @@ const GuestTable = ({ guests }: GuestTableProps) => {
           </table>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
