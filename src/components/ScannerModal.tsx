@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, X, RefreshCw } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Camera, RefreshCw, Scan } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -63,7 +63,6 @@ const ScannerModal = ({ isOpen, onClose, onScan }: ScannerModalProps) => {
 
   useEffect(() => {
     if (isOpen) {
-      // Small delay to ensure DOM is ready
       setTimeout(startScanner, 100);
     }
     
@@ -81,25 +80,48 @@ const ScannerModal = ({ isOpen, onClose, onScan }: ScannerModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md bg-card border-border">
+      <DialogContent className="sm:max-w-lg glass border-border/50 rounded-2xl">
         <DialogHeader>
-          <DialogTitle className="font-serif text-2xl text-foreground flex items-center gap-2">
-            <Camera className="w-6 h-6 text-primary" />
+          <DialogTitle className="font-display text-2xl text-foreground flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-gold flex items-center justify-center">
+              <Camera className="w-5 h-5 text-primary-foreground" />
+            </div>
             Scan Guest QR Code
           </DialogTitle>
         </DialogHeader>
         
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-secondary/50 border border-border">
+        <div className="flex flex-col items-center gap-5 pt-2">
+          <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-onyx border border-border/50">
             <div id="qr-reader-modal" className="w-full h-full" />
             
             {isScanning && (
               <div className="absolute inset-0 pointer-events-none">
+                {/* Scanning frame */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-56 h-56 border-2 border-primary rounded-lg animate-pulse-gold" />
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="w-60 h-60 relative"
+                  >
+                    {/* Corner brackets */}
+                    <div className="absolute top-0 left-0 w-8 h-8 border-l-2 border-t-2 border-primary rounded-tl-lg" />
+                    <div className="absolute top-0 right-0 w-8 h-8 border-r-2 border-t-2 border-primary rounded-tr-lg" />
+                    <div className="absolute bottom-0 left-0 w-8 h-8 border-l-2 border-b-2 border-primary rounded-bl-lg" />
+                    <div className="absolute bottom-0 right-0 w-8 h-8 border-r-2 border-b-2 border-primary rounded-br-lg" />
+                    
+                    {/* Scanning line */}
+                    <motion.div 
+                      className="absolute left-2 right-2 h-0.5 bg-gradient-gold rounded-full glow-gold"
+                      initial={{ top: '10%' }}
+                      animate={{ top: ['10%', '90%', '10%'] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                  </motion.div>
                 </div>
-                <div className="absolute top-3 left-3 flex items-center gap-2 bg-primary/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                  <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                
+                {/* Status indicator */}
+                <div className="absolute top-4 left-4 flex items-center gap-2 glass-gold px-4 py-2 rounded-full">
+                  <Scan className="w-4 h-4 text-primary animate-pulse" />
                   <span className="text-xs text-primary font-medium">Scanning...</span>
                 </div>
               </div>
@@ -107,21 +129,25 @@ const ScannerModal = ({ isOpen, onClose, onScan }: ScannerModalProps) => {
           </div>
 
           {error && (
-            <div className="text-destructive text-sm text-center bg-destructive/10 px-4 py-2 rounded-lg w-full">
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="w-full text-destructive text-sm text-center bg-destructive/10 px-4 py-3 rounded-xl border border-destructive/20"
+            >
               {error}
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={startScanner}
-                className="ml-2"
+                className="ml-2 text-destructive hover:text-destructive hover:bg-destructive/10"
               >
                 <RefreshCw className="w-4 h-4 mr-1" />
                 Retry
               </Button>
-            </div>
+            </motion.div>
           )}
 
-          <p className="text-sm text-muted-foreground text-center">
+          <p className="text-sm text-muted-foreground text-center pb-2">
             Position the QR code within the frame to scan
           </p>
         </div>

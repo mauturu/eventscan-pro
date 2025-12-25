@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+        sans: ['Outfit', 'system-ui', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
+        display: ['Playfair Display', 'Georgia', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -24,6 +25,10 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         gold: "hsl(var(--gold))",
+        "gold-light": "hsl(var(--gold-light))",
+        champagne: "hsl(var(--champagne))",
+        ivory: "hsl(var(--ivory))",
+        onyx: "hsl(var(--onyx))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -94,17 +99,27 @@ export default {
           "100%": { backgroundPosition: "200% 0" },
         },
         "pulse-gold": {
-          "0%, 100%": { boxShadow: "0 0 15px hsl(43 74% 66% / 0.2)" },
-          "50%": { boxShadow: "0 0 30px hsl(43 74% 66% / 0.4)" },
+          "0%, 100%": { boxShadow: "0 0 20px hsl(38 92% 60% / 0.2)" },
+          "50%": { boxShadow: "0 0 40px hsl(38 92% 60% / 0.4)" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-8px)" },
+        },
+        "glow": {
+          "0%, 100%": { opacity: "0.6" },
+          "50%": { opacity: "1" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 0.4s ease-out",
+        "fade-in": "fade-in 0.5s ease-out",
         "scale-in": "scale-in 0.3s ease-out",
         "shimmer": "shimmer 2s linear infinite",
-        "pulse-gold": "pulse-gold 2s ease-in-out infinite",
+        "pulse-gold": "pulse-gold 2.5s ease-in-out infinite",
+        "float": "float 6s ease-in-out infinite",
+        "glow": "glow 2s ease-in-out infinite",
       },
     },
   },

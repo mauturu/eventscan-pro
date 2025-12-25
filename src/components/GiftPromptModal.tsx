@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Gift, X } from 'lucide-react';
+import { Gift, X, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -22,43 +22,47 @@ const GiftPromptModal = ({ isOpen, guestData, onConfirm, onClose }: GiftPromptMo
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-card border-border">
-        <DialogHeader>
-          <DialogTitle className="font-serif text-2xl text-foreground text-center">
+      <DialogContent className="sm:max-w-md glass border-border/50 rounded-2xl">
+        <DialogHeader className="text-center pb-2">
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: 'spring', damping: 12 }}
+            className="w-20 h-20 mx-auto rounded-2xl bg-gradient-gold flex items-center justify-center glow-gold-intense mb-4"
+          >
+            <Sparkles className="w-10 h-10 text-primary-foreground" />
+          </motion.div>
+          <DialogTitle className="font-display text-3xl text-foreground text-center tracking-tight">
             Welcome, {guestData.name}!
           </DialogTitle>
-          <DialogDescription className="text-center text-muted-foreground">
+          <DialogDescription className="text-center text-muted-foreground mt-2">
             We're delighted to have you here
           </DialogDescription>
         </DialogHeader>
         
-        <div className="flex flex-col items-center gap-6 py-4">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', damping: 10 }}
-            className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center glow-gold"
-          >
-            <Gift className="w-10 h-10 text-primary" />
-          </motion.div>
-          
-          <p className="text-lg text-center text-foreground">
-            Did you bring a gift for the occasion?
-          </p>
+        <div className="flex flex-col items-center gap-8 py-6">
+          <div className="text-center">
+            <p className="text-lg text-foreground font-medium mb-1">
+              Did you bring a gift?
+            </p>
+            <p className="text-sm text-muted-foreground">
+              for this special occasion
+            </p>
+          </div>
 
           <div className="flex gap-4 w-full">
             <Button
               variant="outline"
               size="lg"
-              className="flex-1 border-border hover:bg-secondary"
+              className="flex-1 h-14 border-border/60 hover:border-muted-foreground/40 hover:bg-muted/30 rounded-xl transition-all duration-300"
               onClick={() => onConfirm(false)}
             >
-              <X className="w-5 h-5 mr-2" />
-              No Gift
+              <X className="w-5 h-5 mr-2 text-muted-foreground" />
+              <span className="text-muted-foreground">No Gift</span>
             </Button>
             <Button
               size="lg"
-              className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+              className="flex-1 h-14 bg-gradient-gold text-primary-foreground hover:opacity-90 glow-gold rounded-xl transition-all duration-300"
               onClick={() => onConfirm(true)}
             >
               <Gift className="w-5 h-5 mr-2" />
