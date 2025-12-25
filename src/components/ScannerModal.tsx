@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { motion } from 'framer-motion';
 import { Camera, RefreshCw, Scan } from 'lucide-react';
@@ -20,14 +20,42 @@ const ScannerModal = ({ isOpen, onClose, onScan }: ScannerModalProps) => {
   const [isScanning, setIsScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scannerRef = useRef<Html5Qrcode | null>(null);
+  const isScanningRef = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const startScanner = async () => {
+  const stopScanner = useCallback(async () => {
+    if (scannerRef.current && isScanningRef.current) {
+      try {
+        await scannerRef.current.stop();
+      } catch (err) {
+        // Ignore stop errors
+      }
+      isScanningRef.current = false;
+      setIsScanning(false);
+    }
+  }, []);
+
+  const startScanner = useCallback(async () => {
     setError(null);
     
+    // Wait for container to be available
+    if (!containerRef.current) {
+      setError('Scanner container not ready. Please try again.');
+      return;
+    }
+
     try {
-      if (!scannerRef.current) {
-        scannerRef.current = new Html5Qrcode('qr-reader-modal');
+      // Clean up any existing scanner
+      if (scannerRef.current) {
+        try {
+          await scannerRef.current.stop();
+        } catch {
+          // Ignore
+        }
+        scannerRef.current = null;
       }
+
+      scannerRef.current = new Html5Qrcode('qr-reader-modal');
 
       await scannerRef.current.start(
         { facingMode: 'environment' },
@@ -43,38 +71,40 @@ const ScannerModal = ({ isOpen, onClose, onScan }: ScannerModalProps) => {
         () => {}
       );
       
+      isScanningRef.current = true;
       setIsScanning(true);
     } catch (err) {
       console.error('Scanner error:', err);
       setError('Unable to access camera. Please ensure camera permissions are granted.');
+      isScanningRef.current = false;
+      setIsScanning(false);
     }
-  };
-
-  const stopScanner = async () => {
-    if (scannerRef.current && isScanning) {
-      try {
-        await scannerRef.current.stop();
-        setIsScanning(false);
-      } catch (err) {
-        console.error('Error stopping scanner:', err);
-      }
-    }
-  };
+  }, [onScan, stopScanner]);
 
   useEffect(() => {
     if (isOpen) {
-      setTimeout(startScanner, 100);
+      // Wait for dialog to render and DOM to be ready
+      const timer = setTimeout(() => {
+        startScanner();
+      }, 300);
+      return () => clearTimeout(timer);
+    } else {
+      // Cleanup when modal closes
+      stopScanner();
     }
-    
+  }, [isOpen, startScanner, stopScanner]);
+
+  useEffect(() => {
     return () => {
-      if (scannerRef.current && isScanning) {
-        scannerRef.current.stop().catch(console.error);
+      // Cleanup on unmount
+      if (scannerRef.current && isScanningRef.current) {
+        scannerRef.current.stop().catch(() => {});
       }
     };
-  }, [isOpen]);
+  }, []);
 
-  const handleClose = () => {
-    stopScanner();
+  const handleClose = async () => {
+    await stopScanner();
     onClose();
   };
 
@@ -91,7 +121,10 @@ const ScannerModal = ({ isOpen, onClose, onScan }: ScannerModalProps) => {
         </DialogHeader>
         
         <div className="flex flex-col items-center gap-5 pt-2">
-          <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-onyx border border-border/50">
+          <div 
+            ref={containerRef}
+            className="relative w-full aspect-square rounded-2xl overflow-hidden bg-onyx border border-border/50"
+          >
             <div id="qr-reader-modal" className="w-full h-full" />
             
             {isScanning && (
