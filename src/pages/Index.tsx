@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, Dispatch, SetStateAction } from 'react';
 import { Link } from 'react-router-dom';
-import { QrCode, Scan, Sparkles } from 'lucide-react';
+import { Scan, Sparkles, Settings } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import GuestTable from '@/components/GuestTable';
@@ -8,8 +8,13 @@ import ScannerModal from '@/components/ScannerModal';
 import GiftPromptModal from '@/components/GiftPromptModal';
 import { Guest, QRGuestData } from '@/types/guest';
 
-const Index = () => {
-  const [guests, setGuests] = useState<Guest[]>([]);
+interface IndexProps {
+  eventName: string;
+  guests: Guest[];
+  setGuests: Dispatch<SetStateAction<Guest[]>>;
+}
+
+const Index = ({ eventName, guests, setGuests }: IndexProps) => {
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [isGiftPromptOpen, setIsGiftPromptOpen] = useState(false);
   const [scannedGuest, setScannedGuest] = useState<QRGuestData | null>(null);
@@ -89,18 +94,12 @@ const Index = () => {
                 <Sparkles className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="font-display text-3xl text-foreground tracking-tight">Event Check-In</h1>
+                <h1 className="font-display text-3xl text-foreground tracking-tight">{eventName}</h1>
                 <p className="text-sm text-muted-foreground mt-0.5">Welcome your guests with elegance</p>
               </div>
             </div>
             
             <div className="flex items-center gap-4">
-              <Link to="/generate">
-                <Button variant="outline" className="gap-2 border-border/60 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300">
-                  <QrCode className="w-4 h-4" />
-                  <span className="hidden sm:inline">Generate QR Codes</span>
-                </Button>
-              </Link>
               <Button 
                 onClick={() => setIsScannerOpen(true)}
                 className="gap-2 bg-gradient-gold text-primary-foreground hover:opacity-90 glow-gold transition-all duration-300"
@@ -117,6 +116,16 @@ const Index = () => {
       <main className="relative container py-10">
         <GuestTable guests={guests} />
       </main>
+
+      {/* Floating Admin Button */}
+      <Link to="/admin" className="fixed bottom-6 right-6 z-50">
+        <Button 
+          size="icon" 
+          className="w-14 h-14 rounded-full bg-secondary hover:bg-secondary/80 border border-border shadow-lg transition-all duration-300 hover:scale-105"
+        >
+          <Settings className="w-6 h-6 text-foreground" />
+        </Button>
+      </Link>
 
       {/* Scanner Modal */}
       <ScannerModal
