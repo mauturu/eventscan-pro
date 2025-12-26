@@ -117,14 +117,12 @@ const Index = ({ eventName, guests, setGuests }: IndexProps) => {
         <GuestTable guests={guests} />
       </main>
 
-      {/* Floating Admin Button */}
-      <Link to="/admin" className="fixed bottom-6 right-6 z-50">
-        <Button 
-          size="icon" 
-          className="w-14 h-14 rounded-full bg-secondary hover:bg-secondary/80 border border-border shadow-lg transition-all duration-300 hover:scale-105"
-        >
-          <Settings className="w-6 h-6 text-foreground" />
-        </Button>
+      {/* Subtle Admin Button */}
+      <Link 
+        to="/admin" 
+        className="fixed bottom-3 right-3 z-50 w-6 h-6 rounded bg-border/30 hover:bg-border/60 flex items-center justify-center opacity-30 hover:opacity-80 transition-all duration-300"
+      >
+        <Settings className="w-3 h-3 text-muted-foreground" />
       </Link>
 
       {/* Scanner Modal */}
