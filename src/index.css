@@ -6,63 +6,63 @@
 
 @layer base {
   :root {
-    --background: 240 8% 12%;
+    --background: 240 10% 3.9%;
     --foreground: 40 20% 98%;
 
-    --card: 240 6% 16%;
+    --card: 240 6% 6%;
     --card-foreground: 40 20% 98%;
 
-    --popover: 240 6% 18%;
+    --popover: 240 6% 8%;
     --popover-foreground: 40 20% 98%;
 
-    --primary: 40 85% 65%;
-    --primary-foreground: 240 10% 8%;
+    --primary: 38 92% 60%;
+    --primary-foreground: 240 10% 3.9%;
 
-    --secondary: 240 5% 22%;
+    --secondary: 240 5% 12%;
     --secondary-foreground: 40 20% 98%;
 
-    --muted: 240 5% 25%;
-    --muted-foreground: 40 10% 65%;
+    --muted: 240 5% 15%;
+    --muted-foreground: 40 8% 55%;
 
-    --accent: 40 85% 65%;
-    --accent-foreground: 240 10% 8%;
+    --accent: 38 92% 60%;
+    --accent-foreground: 240 10% 3.9%;
 
-    --destructive: 0 72% 55%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 40 20% 98%;
 
-    --success: 160 70% 45%;
+    --success: 160 84% 39%;
     --success-foreground: 40 20% 98%;
 
-    --border: 240 5% 24%;
-    --input: 240 5% 24%;
-    --ring: 40 85% 65%;
+    --border: 240 5% 14%;
+    --input: 240 5% 14%;
+    --ring: 38 92% 60%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 240 6% 16%;
+    --sidebar-background: 240 6% 6%;
     --sidebar-foreground: 40 20% 98%;
-    --sidebar-primary: 40 85% 65%;
-    --sidebar-primary-foreground: 240 10% 8%;
-    --sidebar-accent: 240 5% 22%;
+    --sidebar-primary: 38 92% 60%;
+    --sidebar-primary-foreground: 240 10% 3.9%;
+    --sidebar-accent: 240 5% 12%;
     --sidebar-accent-foreground: 40 20% 98%;
-    --sidebar-border: 240 5% 24%;
-    --sidebar-ring: 40 85% 65%;
+    --sidebar-border: 240 5% 14%;
+    --sidebar-ring: 38 92% 60%;
 
     /* Elegant luxury tokens */
-    --gold: 40 85% 65%;
-    --gold-light: 42 88% 75%;
-    --gold-muted: 38 45% 50%;
-    --champagne: 40 35% 88%;
-    --ivory: 45 35% 97%;
-    --onyx: 240 8% 18%;
+    --gold: 38 92% 60%;
+    --gold-light: 40 90% 70%;
+    --gold-muted: 38 40% 40%;
+    --champagne: 40 30% 85%;
+    --ivory: 45 30% 96%;
+    --onyx: 240 10% 8%;
     
     /* Elegant glows and gradients */
-    --gold-glow: 0 0 40px hsl(40 85% 65% / 0.18);
-    --gold-glow-intense: 0 0 60px hsl(40 85% 65% / 0.28);
-    --gradient-gold: linear-gradient(135deg, hsl(40 85% 65%), hsl(45 80% 58%));
-    --gradient-gold-subtle: linear-gradient(135deg, hsl(40 85% 65% / 0.18), hsl(45 80% 58% / 0.08));
-    --gradient-dark: linear-gradient(180deg, hsl(240 6% 18%), hsl(240 8% 12%));
-    --gradient-radial: radial-gradient(ellipse at top, hsl(240 6% 20%), hsl(240 8% 12%));
+    --gold-glow: 0 0 40px hsl(38 92% 60% / 0.15);
+    --gold-glow-intense: 0 0 60px hsl(38 92% 60% / 0.25);
+    --gradient-gold: linear-gradient(135deg, hsl(38 92% 60%), hsl(45 85% 50%));
+    --gradient-gold-subtle: linear-gradient(135deg, hsl(38 92% 60% / 0.15), hsl(45 85% 50% / 0.05));
+    --gradient-dark: linear-gradient(180deg, hsl(240 6% 8%), hsl(240 10% 3.9%));
+    --gradient-radial: radial-gradient(ellipse at top, hsl(240 6% 10%), hsl(240 10% 3.9%));
   }
 }
 
