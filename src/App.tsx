@@ -24,7 +24,12 @@ const App = () => {
   
   const [guests, setGuests] = useState<Guest[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY_GUESTS);
-    return saved ? JSON.parse(saved) : [];
+    if (!saved) return [];
+    const parsed = JSON.parse(saved);
+    return parsed.map((g: Guest & { checkedInAt: string }) => ({
+      ...g,
+      checkedInAt: new Date(g.checkedInAt),
+    }));
   });
 
   // Persist guests to localStorage
