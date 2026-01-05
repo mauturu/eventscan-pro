@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Gift, Minus, Plus } from 'lucide-react';
+import { Users, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -11,32 +11,25 @@ import {
 } from '@/components/ui/dialog';
 import { QRGuestData } from '@/types/guest';
 
-interface GiftPromptModalProps {
+interface PartySizeModalProps {
   isOpen: boolean;
   guestData: QRGuestData | null;
-  partySize: number;
-  onConfirm: (giftCount: number) => void;
+  onConfirm: (partySize: number) => void;
   onClose: () => void;
 }
 
-const GiftPromptModal = ({ isOpen, guestData, partySize, onConfirm, onClose }: GiftPromptModalProps) => {
-  const [giftCount, setGiftCount] = useState(0);
-
-  // Reset gift count when modal opens
-  useEffect(() => {
-    if (isOpen) {
-      setGiftCount(0);
-    }
-  }, [isOpen]);
+const PartySizeModal = ({ isOpen, guestData, onConfirm, onClose }: PartySizeModalProps) => {
+  const [partySize, setPartySize] = useState(1);
 
   if (!guestData) return null;
 
   const handleConfirm = () => {
-    onConfirm(giftCount);
+    onConfirm(partySize);
+    setPartySize(1); // Reset for next use
   };
 
-  const increment = () => setGiftCount(prev => Math.min(prev + 1, 99));
-  const decrement = () => setGiftCount(prev => Math.max(prev - 1, 0));
+  const increment = () => setPartySize(prev => Math.min(prev + 1, 20));
+  const decrement = () => setPartySize(prev => Math.max(prev - 1, 1));
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -48,26 +41,23 @@ const GiftPromptModal = ({ isOpen, guestData, partySize, onConfirm, onClose }: G
             transition={{ type: 'spring', damping: 12 }}
             className="w-20 h-20 mx-auto rounded-2xl bg-gradient-gold flex items-center justify-center glow-gold-intense mb-4"
           >
-            <Gift className="w-10 h-10 text-primary-foreground" />
+            <Users className="w-10 h-10 text-primary-foreground" />
           </motion.div>
           <DialogTitle className="font-display text-3xl text-foreground text-center tracking-tight">
-            Gift Registration
+            Welcome, {guestData.name}!
           </DialogTitle>
           <DialogDescription className="text-center text-muted-foreground mt-2">
-            {partySize > 1 
-              ? `${guestData.name}'s party of ${partySize}`
-              : `Thank you, ${guestData.name}`
-            }
+            We're delighted to have you here
           </DialogDescription>
         </DialogHeader>
         
         <div className="flex flex-col items-center gap-8 py-6">
           <div className="text-center">
             <p className="text-lg text-foreground font-medium mb-1">
-              How many gifts did you bring?
+              How many people in your party?
             </p>
             <p className="text-sm text-muted-foreground">
-              for this special occasion
+              including yourself
             </p>
           </div>
 
@@ -77,18 +67,18 @@ const GiftPromptModal = ({ isOpen, guestData, partySize, onConfirm, onClose }: G
               size="icon"
               className="w-14 h-14 rounded-xl border-border/60 hover:border-muted-foreground/40 hover:bg-muted/30"
               onClick={decrement}
-              disabled={giftCount <= 0}
+              disabled={partySize <= 1}
             >
               <Minus className="w-6 h-6" />
             </Button>
             
             <motion.div
-              key={giftCount}
+              key={partySize}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               className="w-20 h-20 rounded-2xl bg-muted/30 border border-border/50 flex items-center justify-center"
             >
-              <span className="font-display text-4xl text-foreground">{giftCount}</span>
+              <span className="font-display text-4xl text-foreground">{partySize}</span>
             </motion.div>
             
             <Button
@@ -96,7 +86,7 @@ const GiftPromptModal = ({ isOpen, guestData, partySize, onConfirm, onClose }: G
               size="icon"
               className="w-14 h-14 rounded-xl border-border/60 hover:border-muted-foreground/40 hover:bg-muted/30"
               onClick={increment}
-              disabled={giftCount >= 99}
+              disabled={partySize >= 20}
             >
               <Plus className="w-6 h-6" />
             </Button>
@@ -107,7 +97,7 @@ const GiftPromptModal = ({ isOpen, guestData, partySize, onConfirm, onClose }: G
             className="w-full h-14 bg-gradient-gold text-primary-foreground hover:opacity-90 glow-gold rounded-xl transition-all duration-300"
             onClick={handleConfirm}
           >
-            {giftCount === 0 ? 'No Gifts' : `Confirm ${giftCount} Gift${giftCount > 1 ? 's' : ''}`}
+            Continue
           </Button>
         </div>
       </DialogContent>
@@ -115,4 +105,4 @@ const GiftPromptModal = ({ isOpen, guestData, partySize, onConfirm, onClose }: G
   );
 };
 
-export default GiftPromptModal;
+export default PartySizeModal;

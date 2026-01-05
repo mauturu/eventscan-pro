@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Gift, Phone, Clock, User, Sparkles } from 'lucide-react';
+import { Users, Gift, Phone, Clock, Sparkles } from 'lucide-react';
 import { Guest } from '@/types/guest';
 
 interface GuestTableProps {
@@ -14,7 +14,8 @@ const GuestTable = ({ guests }: GuestTableProps) => {
     }).format(date);
   };
 
-  const giftCount = guests.filter(g => g.gift).length;
+  const totalGifts = guests.reduce((sum, g) => sum + g.giftCount, 0);
+  const totalPeople = guests.reduce((sum, g) => sum + g.partySize, 0);
 
   return (
     <motion.div 
@@ -37,12 +38,12 @@ const GuestTable = ({ guests }: GuestTableProps) => {
           </div>
           <div className="flex items-center gap-6">
             <div className="text-center px-4">
-              <p className="text-4xl font-display text-gradient-gold">{guests.length}</p>
+              <p className="text-4xl font-display text-gradient-gold">{totalPeople}</p>
               <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Present</p>
             </div>
             <div className="w-px h-12 bg-border/50" />
             <div className="text-center px-4">
-              <p className="text-4xl font-display text-gradient-gold">{giftCount}</p>
+              <p className="text-4xl font-display text-gradient-gold">{totalGifts}</p>
               <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Gifts</p>
             </div>
           </div>
@@ -73,7 +74,8 @@ const GuestTable = ({ guests }: GuestTableProps) => {
                 <th className="w-12">#</th>
                 <th>Guest Name</th>
                 <th>Contact</th>
-                <th className="text-center">Gift</th>
+                <th className="text-center">Party</th>
+                <th className="text-center">Gifts</th>
                 <th>Arrival</th>
               </tr>
             </thead>
@@ -108,14 +110,20 @@ const GuestTable = ({ guests }: GuestTableProps) => {
                       </div>
                     </td>
                     <td className="text-center">
-                      {guest.gift ? (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/50 text-muted-foreground text-xs font-medium">
+                        <Users className="w-3.5 h-3.5" />
+                        {guest.partySize}
+                      </span>
+                    </td>
+                    <td className="text-center">
+                      {guest.giftCount > 0 ? (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-gold text-primary-foreground text-xs font-medium">
                           <Gift className="w-3.5 h-3.5" />
-                          Yes
+                          {guest.giftCount}
                         </span>
                       ) : (
                         <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-muted/50 text-muted-foreground text-xs">
-                          No
+                          0
                         </span>
                       )}
                     </td>

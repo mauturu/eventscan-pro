@@ -2,7 +2,8 @@ export interface Guest {
   id: string;
   name: string;
   phone: string;
-  gift: boolean;
+  partySize: number;
+  giftCount: number;
   checkedInAt: Date;
 }
 

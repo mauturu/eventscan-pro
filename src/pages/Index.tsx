@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import GuestTable from '@/components/GuestTable';
 import ScannerModal from '@/components/ScannerModal';
+import PartySizeModal from '@/components/PartySizeModal';
 import GiftPromptModal from '@/components/GiftPromptModal';
 import { Guest, QRGuestData } from '@/types/guest';
 
@@ -16,8 +17,10 @@ interface IndexProps {
 
 const Index = ({ eventName, guests, setGuests }: IndexProps) => {
   const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const [isPartySizeOpen, setIsPartySizeOpen] = useState(false);
   const [isGiftPromptOpen, setIsGiftPromptOpen] = useState(false);
   const [scannedGuest, setScannedGuest] = useState<QRGuestData | null>(null);
+  const [partySize, setPartySize] = useState(1);
 
   const handleScan = useCallback((data: string) => {
     try {
@@ -45,10 +48,10 @@ const Index = ({ eventName, guests, setGuests }: IndexProps) => {
         return;
       }
 
-      // Close scanner and open gift prompt
+      // Close scanner and open party size prompt
       setScannedGuest({ name, phone });
       setIsScannerOpen(false);
-      setIsGiftPromptOpen(true);
+      setIsPartySizeOpen(true);
     } catch {
       toast.error('Invalid QR Code', {
         description: 'Could not read guest data from QR code.',
@@ -56,24 +59,45 @@ const Index = ({ eventName, guests, setGuests }: IndexProps) => {
     }
   }, [guests]);
 
-  const handleGiftConfirm = (hasGift: boolean) => {
+  const handlePartySizeConfirm = (size: number) => {
+    setPartySize(size);
+    setIsPartySizeOpen(false);
+    setIsGiftPromptOpen(true);
+  };
+
+  const handleGiftConfirm = (giftCount: number) => {
     if (!scannedGuest) return;
 
     const newGuest: Guest = {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       name: scannedGuest.name,
       phone: scannedGuest.phone,
-      gift: hasGift,
+      partySize: partySize,
+      giftCount: giftCount,
       checkedInAt: new Date(),
     };
 
     setGuests(prev => [newGuest, ...prev]);
     setIsGiftPromptOpen(false);
     setScannedGuest(null);
+    setPartySize(1);
 
+    const giftMessage = giftCount > 0 
+      ? `Thank you for your ${giftCount} gift${giftCount > 1 ? 's' : ''}!` 
+      : 'Enjoy the event!';
+    
     toast.success(`Welcome, ${newGuest.name}!`, {
-      description: hasGift ? 'Thank you for your generous gift!' : 'Enjoy the event!',
+      description: partySize > 1 
+        ? `Party of ${partySize}. ${giftMessage}`
+        : giftMessage,
     });
+  };
+
+  const resetFlow = () => {
+    setIsPartySizeOpen(false);
+    setIsGiftPromptOpen(false);
+    setScannedGuest(null);
+    setPartySize(1);
   };
 
   return (
@@ -132,15 +156,21 @@ const Index = ({ eventName, guests, setGuests }: IndexProps) => {
         onScan={handleScan}
       />
 
+      {/* Party Size Modal */}
+      <PartySizeModal
+        isOpen={isPartySizeOpen}
+        guestData={scannedGuest}
+        onConfirm={handlePartySizeConfirm}
+        onClose={resetFlow}
+      />
+
       {/* Gift Prompt Modal */}
       <GiftPromptModal
         isOpen={isGiftPromptOpen}
         guestData={scannedGuest}
+        partySize={partySize}
         onConfirm={handleGiftConfirm}
-        onClose={() => {
-          setIsGiftPromptOpen(false);
-          setScannedGuest(null);
-        }}
+        onClose={resetFlow}
       />
     </div>
   );
