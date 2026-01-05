@@ -26,9 +26,11 @@ const App = () => {
     const saved = localStorage.getItem(STORAGE_KEY_GUESTS);
     if (!saved) return [];
     const parsed = JSON.parse(saved);
-    return parsed.map((g: Guest & { checkedInAt: string }) => ({
+    return parsed.map((g: any) => ({
       ...g,
       checkedInAt: new Date(g.checkedInAt),
+      partySize: g.partySize ?? 1,
+      giftCount: g.giftCount ?? (g.gift ? 1 : 0),
     }));
   });
 
